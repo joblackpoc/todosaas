@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block title %}Welcome to SaaS Todo - Streamline Your Tasks{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+   
+    <section class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-3">Streamline Your Tasks with SaaS Todo</h1>
+                    <p class="lead mb-4">Boost your productivity and manage tasks effortlessly with our intuitive, subscription-based todo app.</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <a href="{% url 'signup' %}" class="btn btn-light btn-lg px-4 me-md-2">Get Started</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">Log In</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <img src="{% static 'images/to-do-list.png' %}" alt="SaaS Todo List" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Why Choose SaaS Todo?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-check-double fa-3x text-primary mb-3"></i>
+                            <h3 class="card-title h4">Efficient Task Management</h3>
+                            <p class="card-text">Organize and prioritize your tasks with ease, ensuring nothing falls through the cracks.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-cloud fa-3x text-primary mb-3"></i>
+                            <h3 class="card-title h4">Cloud-Based Solution</h3>
+                            <p class="card-text">Access your tasks from anywhere, on any device, with our secure cloud-based platform.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                            <h3 class="card-title h4">Productivity Insights</h3>
+                            <p class="card-text">Gain valuable insights into your productivity patterns and improve your workflow.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  
+    <section class="bg-light py-5">
+        <div class="container text-center">
+            <h2 class="mb-4">Ready to Boost Your Productivity?</h2>
+            <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Start Your Free Trial</a>
+        </div>
+    </section>
+</div>
+{% endblock %}

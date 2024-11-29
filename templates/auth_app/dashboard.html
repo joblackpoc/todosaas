@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Welcome, {{ user.username }}!</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mt-4">
+                <div class="card-header bg-primary text-white">
+                    Your Subscription
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Current Plan: {{ subscription.plan.name }}</h5>
+
+                    {% if plan_change_info and plan_change_info.type == 'downgrade' %}
+                        <div class="alert alert-info">
+                            Your plan will be downgraded from {{ plan_change_info.from_plan }} to {{ plan_change_info.to_plan }} on {{ plan_change_date|date:"F d, Y" }}.
+                        </div>
+                    {% endif %}
+
+                    {% if cancellation_message %}
+                        <div class="alert alert-warning">
+                            {{ cancellation_message }}
+                        </div>
+                    {% endif %}
+
+                    <p class="card-text">Task Limit: {{ subscription.plan.task_limit }} per month</p>
+                    <p class="card-text">Price: ${{ subscription.plan.price }}/month</p>
+                    
+                    <h6 class="mt-4">Task Usage This Month:</h6>
+                    <p>Tasks Created: {{ tasks_this_month }}</p>
+                    <p>Tasks Left: {{ tasks_left }}</p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {% widthratio tasks_this_month tasks_limit 100 %}%;" 
+                             aria-valuenow="{{ tasks_this_month }}" aria-valuemin="0" aria-valuemax="{{ tasks_limit }}">
+                            {{ tasks_this_month }} / {{ tasks_limit }}
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'pricing' %}" class="btn btn-primary">Manage Subscription</a>
+                    
+                    {% if subscription.plan.name != 'Free' and not cancellation_message and not plan_change_info %}
+                        <form method="post" action="{% url 'cancel_subscription' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel your subscription?');">
+                                Cancel Subscription
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        {% if show_quick_stats %}
+        <div class="col-md-4">
+            <div class="card mt-4">
+                <div class="card-header bg-success text-white">
+                    Quick Stats
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% if 'total_tasks' in quick_stats %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Total Tasks
+                            <span class="badge bg-primary rounded-pill">{{ quick_stats.total_tasks }}</span>
+                        </li>
+                        {% endif %}
+                        {% if 'completed_tasks' in quick_stats %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Completed Tasks
+                            <span class="badge bg-success rounded-pill">{{ quick_stats.completed_tasks }}</span>
+                        </li>
+                        {% endif %}
+                        {% if 'pending_tasks' in quick_stats %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Pending Tasks
+                            <span class="badge bg-warning rounded-pill">{{ quick_stats.pending_tasks }}</span>
+                        </li>
+                        {% endif %}
+                        {% if 'tasks_due_today' in quick_stats %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Tasks Due Today
+                            <span class="badge bg-info rounded-pill">{{ quick_stats.tasks_due_today }}</span>
+                        </li>
+                        {% endif %}
+                        {% if 'overdue_tasks' in quick_stats %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Overdue Tasks
+                            <span class="badge bg-danger rounded-pill">{{ quick_stats.overdue_tasks }}</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+       
+        <div class="col-12 mt-5">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    Danger Zone
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Delete Account</h5>
+                    <p class="card-text">Warning: This action cannot be undone. All your data will be permanently deleted.</p>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                        Delete My Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteAccountModalLabel">Confirm Account Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete your account? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" action="{% url 'delete_account' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete My Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

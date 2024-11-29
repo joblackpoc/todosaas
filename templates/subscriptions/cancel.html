@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscription Cancelled{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Subscription Cancelled</h2>
+    <p>Your subscription process was cancelled. No changes have been made to your account.
+    </p>
+    <a href="{% url 'pricing' %}" class="btn btn-primary">View Plans</a>
+</div>
+{% endblock %}

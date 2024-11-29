@@ -1,0 +1,62 @@
+body {
+    min-height: 100vh;           
+    display: flex;             
+    flex-direction: column;         
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+}
+
+.card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+}
+
+.form-control {
+    border-radius: 0.25rem;  
+}
+
+.footer {
+    margin-top: auto;                 
+    background-color: #f8f9fa;        
+    padding: 1rem 0;                 
+}
+
+.tasks-icon {
+    background-color: #0056b3;   
+    color:white;
+    padding: 8px;                     
+    border-radius: 50%;               
+    font-size: 1.2rem;                
+}  
+
+
+
+.nav-link-custom {
+    color: #007bff !important;        
+    font-weight: bold;                
+    transition: background-color 0.3s, color 0.3s, border-radius 0.3s;  
+    padding: 5px 10px;                
+    border-radius: 0;                 
+    margin-left: 10px;                
+}
+
+
+.nav-link-custom:hover {
+    background-color: #007bff;        
+    color: #ffffff !important;        
+    border-radius: 5px;               
+}
+
+
+.nav-link-custom.active {
+    background-color: #0056b3;        
+    color: #ffffff !important;       
+    border-radius: 5px;              
+}
+
+img {
+
+    width: 170px; height: 170px;
+    margin-bottom: 30px;
+}

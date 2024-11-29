@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Your Todo List</h1>
+
+
+{% if show_timer_and_date %}
+    <div class="todo-date-time mb-4">
+        <span id="current-date"></span>
+        <span id="live-time"></span>
+    </div>
+{% endif %}
+
+<a href="{% url 'create_todo' %}" class="btn btn-primary mb-3">Add New Task</a>
+
+<ul class="list-group mt-3">
+    {% for todo in page_obj %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            <strong>{{ todo.title }}</strong>
+            <div class="task-dates"> 
+                {% if todo.start_date %}
+                <small>Start Date: {{ todo.start_date|date:"M d, Y" }}</small><br>
+                {% endif %}  
+                {% if todo.end_date %}
+                <small>End Date: {{ todo.end_date|date:"M d, Y" }}</small>
+                {% endif %}
+            </div>
+        </div>
+        <span>
+            <a href="{% url 'update_todo' todo.pk %}" class="btn btn-sm btn-warning">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a href="{% url 'delete_todo' todo.pk %}" class="btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i> Delete
+            </a>
+            {% if not todo.completed %}
+            <a href="{% url 'update_todo_status' todo.pk %}" class="btn btn-sm btn-success">
+                <i class="fas fa-check"></i> Complete
+            </a>
+            {% else %}
+            <a href="{% url 'update_todo_status' todo.pk %}" class="btn btn-sm btn-secondary">
+                <i class="fas fa-undo"></i> Undo Complete
+            </a>
+            {% endif %}
+        </span>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No tasks to display.</li>
+    {% endfor %}
+</ul>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<nav aria-label="Page navigation example" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateDateTime() {
+        const now = new Date();       
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const currentDate = now.toLocaleDateString('en-US', options);     
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        const liveTime = `${hours}:${minutes}:${seconds}`;    
+        document.getElementById('current-date').textContent = currentDate;
+        document.getElementById('live-time').textContent = liveTime;
+    }
+
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+</script>
+{% endblock %}
